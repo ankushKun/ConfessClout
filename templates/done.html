@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<title>Clout Confessions</title>
+{% endblock %}
+
+{% block body %}
+
+<h1>💎 <a href="/">CLOUT CONFESSIONS</a> 💎</h1>
+
+<h3>Your confession was posted on <a href="https://bitclout.com/u/ConfessClout" target="_blank">@ConfessClout</a></h3>
+
+{% if data.count %}
+<p>Confession #{{data.count}}</p>
+{% endif %}
+
+{% if data.postUrl %}
+<a href="{{data.postUrl}}" target="_blank">View post on BitClout</a>
+<br><br>
+{% endif %}
+
+{% endblock %}

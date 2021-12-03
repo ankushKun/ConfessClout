@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<title>Clout Confessions</title>
+{% endblock %}
+
+{% block body %}
+
+<h1>💎 <a href="/">CLOUT CONFESSIONS</a> 💎</h1>
+
+{% if data.error %}
+<h3>There was some error</h3>
+<h4>{{data.error}}</h4>
+
+{% endif %}
+
+{% endblock %}
