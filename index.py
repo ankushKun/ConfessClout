@@ -66,5 +66,5 @@ def postConfession():
 
 
 if __name__ == "__main__":
-    app.secret_key = config("SESSION_KEY")
+    app.secret_key = SEEDHEX
     app.run(debug=False)
