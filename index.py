@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, jsonify, url_for
+from flask import Flask, render_template, request, session, redirect
 from deso import Post
-from werkzeug.utils import redirect
 from decouple import config
-import os
 import json
+from flask.helpers import url_for
 import pyrebase
 
 
@@ -27,43 +26,46 @@ def increment_counter():
     db.child("ConfessClout").child("counter").set(counter)
 
 
-DATA = {}
-
-
 @app.route("/", methods=["POST", "GET"])
 def home():
-    global DATA
-    print(DATA)
-    if request.method == "POST":
-        print(request.form)
-        if "publicKey" in request.form:
-            DATA["publicKey"] = request.form["publicKey"]
-            print("/ - publicKey", DATA)
-            return render_template("index.html", data=DATA), 200
-        if "confession" in request.form:
-            postBody = request.form["confession"].replace(
-                "@", "@ ").replace("@  ", "@ ")
-            try:
-                pubKey = DATA["publicKey"]
-                if(not (pubKey == None or pubKey == "")):
-                    current_count = get_current_count()
-                    res = post.send(
-                        f"Confession #{current_count} \n\n{postBody}")
-                    if res["status"] == 200:
-                        hex = res["postHashHex"]
-                        DATA = {
-                            "postUrl": f"https://bitclout.com/posts/{hex}", "count": current_count
-                        }
-                        increment_counter()
-                        return render_template("done.html", data=DATA), 200
-                else:
-                    return render_template("error.html", data={"error": "'publicKey' not found"}), 400
-            except Exception as e:
-                return render_template("error.html", data={"error": e}), 400
+    return render_template("index.html", data=session)
 
+
+@app.route("/setPublicKey", methods=["POST"])
+def setPublicKey():
+    pk = request.form["publicKey"]
+    session["publicKey"] = pk
+    return "public key stored in session", 200
+
+
+@app.route("/postConfession", methods=["POST"])
+def postConfession():
+    if "publicKey" in session:
+        if "confession" in request.form:
+            session["postBody"] = request.form["confession"]
+        else:
+            return render_template("error.html", data={"error": "did not get postBody"}), 200
+        try:
+            b = session['postBody']
+            res = post.send(
+                f"Confession #{get_current_count()}\n⸻⸻⸻⸻⸻\n{b}")
+
+            if res["status"] == 200:
+                data = {"postUrl": "https://bitclout.com/posts/" + res["postHashHex"],
+                        "count": get_current_count()
+                        }
+                increment_counter()
+                del session["publicKey"]
+                del session["postBody"]
+                return render_template("done.html", data=data), 200
+            else:
+                return render_template("error.html", data={"error": res}), 200
+        except Exception as e:
+            return render_template("error.html", data={"error": e}), 200
     else:
-        return render_template("index.html", data=DATA)
+        return render_template("error.html", data={"error": "'publicKey' not found"}), 200
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.secret_key = config("SESSION_KEY")
+    app.run(debug=True)

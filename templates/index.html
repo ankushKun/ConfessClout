@@ -14,13 +14,13 @@
 <p><button class="button" onclick="login()">Login with DESO to post confessions</button></p>
 {% endif %}
 {% if data.publicKey %}
-<p style="font-size: xx-small;">Logged in as <i>{{data.publicKey}}</i></p>
+<p style="font-size: x-small;">Logged in as <i>{{data.publicKey}}</i></p>
 {% endif %}
 
-<form action=" /send" method="POST" onsubmit="return confirm('Do you really want to submit the form?');">
-    <textarea name="confession" cols="100" rows="20" style="max-width: 80vw; max-height: 50vh;" minlength="10" required
-        placeholder="Write confession here ;)" {% if data.postBody %} {% endif
-        %}>{% if data.postBody %}{{data.postBody}}{% endif %}</textarea>
+<form action="/postConfession" method="post" onsubmit="return confirm('Do you really want to submit the form?');">
+    <textarea id="confession" name="confession" cols="100" rows="20" style="max-width: 80vw; max-height: 50vh;"
+        minlength="10" required placeholder="Write confession here ;)" {% if data.postBody %} {% endif %}{% if not
+        data.publicKey %}disabled{% endif %}>{% if data.postBody %}{{data.postBody}}{% endif %}</textarea>
     <br>
     <input type="submit" value="SEND" class="button" {% if not data.publicKey %}disabled
         style="background-color:gray;color: black; cursor: default;" {% endif %}>

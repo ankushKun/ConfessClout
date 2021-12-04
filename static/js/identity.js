@@ -1,5 +1,15 @@
 identityEndpoint = "https://identity.deso.org";
 
+// function submitForm() {
+//     const text = $("#confession").val();
+//     $.ajax({
+//         url: "/postConfession",
+//         method: "POST",
+//         data: { confession: text },
+//         success: function () { console.log("sent confession"); }
+//     });
+// }
+
 function login() {
     identityWindow = window.open(
         `${identityEndpoint}/log-in?accessLevelRequest=2`,
@@ -27,14 +37,13 @@ function handleLogin(payload) {
     if (identityWindow) {
         identityWindow.close();
         identityWindow = null;
-        console.log("logged in " + payload.publicKeyAdded);
-        sessionStorage.setItem("publicKey", payload.publicKeyAdded);
         $.ajax({
-            url: "/",
+            url: "/setPublicKey",
             method: "POST",
             data: { publicKey: payload.publicKeyAdded },
             success: function () { window.location.reload(); }
         });
+        console.log("logged in " + payload.publicKeyAdded);
     }
 
 
