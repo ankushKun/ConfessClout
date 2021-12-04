@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 from deso import Post
 from werkzeug.utils import redirect
 from decouple import config
@@ -31,17 +31,15 @@ DATA = {}
 
 
 @app.route("/", methods=["POST", "GET"])
-def index():
-    return render_template("index.html", data=DATA)
-
-
-@app.route("/send", methods=["POST"])
-def send():
+def home():
     global DATA
+    print(DATA)
     if request.method == "POST":
         print(request.form)
         if "publicKey" in request.form:
             DATA["publicKey"] = request.form["publicKey"]
+            print("/ - publicKey", DATA)
+            return render_template("index.html", data=DATA), 200
         if "confession" in request.form:
             postBody = request.form["confession"].replace(
                 "@", "@ ").replace("@  ", "@ ")
@@ -57,15 +55,14 @@ def send():
                             "postUrl": f"https://bitclout.com/posts/{hex}", "count": current_count
                         }
                         increment_counter()
-                        return render_template("done.html", data=DATA)
+                        return render_template("done.html", data=DATA), 200
+                else:
+                    return render_template("error.html", data={"error": "'publicKey' not found"}), 400
             except Exception as e:
-                return render_template("error.html", data={"error": e})
-        return render_template("done.html", data=DATA), 200
+                return render_template("error.html", data={"error": e}), 400
 
-
-# @app.route("/done", methods=["GET", "POST"])
-# def done():
-#     return render_template("done.html", data=DATA)
+    else:
+        return render_template("index.html", data=DATA)
 
 
 if __name__ == "__main__":

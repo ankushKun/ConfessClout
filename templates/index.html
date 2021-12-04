@@ -13,8 +13,11 @@
 {% if not data.publicKey %}
 <p><button class="button" onclick="login()">Login with DESO to post confessions</button></p>
 {% endif %}
+{% if data.publicKey %}
+<p style="font-size: xx-small;">Logged in as <i>{{data.publicKey}}</i></p>
+{% endif %}
 
-<form action="/send" method="POST" onsubmit="return confirm('Do you really want to submit the form?');">
+<form action=" /send" method="POST" onsubmit="return confirm('Do you really want to submit the form?');">
     <textarea name="confession" cols="100" rows="20" style="max-width: 80vw; max-height: 50vh;" minlength="10" required
         placeholder="Write confession here ;)" {% if data.postBody %} {% endif
         %}>{% if data.postBody %}{{data.postBody}}{% endif %}</textarea>

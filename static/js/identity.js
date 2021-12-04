@@ -27,8 +27,14 @@ function handleLogin(payload) {
     if (identityWindow) {
         identityWindow.close();
         identityWindow = null;
-        $.post("/send", { publicKey: payload.publicKeyAdded });
-        location.reload();
+        console.log("logged in " + payload.publicKeyAdded);
+        sessionStorage.setItem("publicKey", payload.publicKeyAdded);
+        $.ajax({
+            url: "/",
+            method: "POST",
+            data: { publicKey: payload.publicKeyAdded },
+            success: function () { window.location.reload(); }
+        });
     }
 
 
