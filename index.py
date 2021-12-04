@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session
 from deso import Post
 from decouple import config
 import json
-from flask.helpers import url_for
 import pyrebase
 
 
