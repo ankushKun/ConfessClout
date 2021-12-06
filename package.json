@@ -8,9 +8,6 @@
     "start": "node server.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
-  "engines": {
-    "node": "17.0.1"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
