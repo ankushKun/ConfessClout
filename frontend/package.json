@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:5000",
-  "homepage": "https://confessclout.vercel.app",
+  "homepage": "https://confess-clout.vercel.app",
   "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.0",
