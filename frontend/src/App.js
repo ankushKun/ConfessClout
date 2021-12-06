@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import './App.css';
@@ -33,7 +34,7 @@ function App() {
     }
   }
 
-  return (
+  return (<BrowserRouter basename="/">
     <div className="App">
       <header className="App-header">
         <Header />
@@ -62,7 +63,7 @@ function App() {
         </>
         }
       </header>
-    </div >
+    </div ></BrowserRouter>
   );
 }
 

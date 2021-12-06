@@ -88,4 +88,7 @@ var pendingRequests = [];
 // eslint-disable-next-line
 var identityWindow = null;
 
-module.exports = { setPublicKeySetter, login }
+export {
+    setPublicKeySetter, login
+}
+// module.exports = { setPublicKeySetter: setPublicKeySetter, login: login }
