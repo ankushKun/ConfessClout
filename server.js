@@ -52,13 +52,6 @@ async function sendPost(body, quoteHex = "") {
 }
 
 app.use(bodyParser.json());
-// static files (build of your frontend)
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('frontend/build/'));
-    app.get('/*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-    })
-}
 
 const keys = [];
 
@@ -89,6 +82,14 @@ app.post("/postConfession", (request, response) => {
             });
     }
 });
+
+// static files (build of your frontend)
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+    app.get('/*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+    })
+}
 
 
 const port = process.env.PORT || 5000;
