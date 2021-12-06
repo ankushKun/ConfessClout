@@ -1,13 +1,16 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 import { config } from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue, set } from "firebase/database";
 import signTransaction from './sign.js';
 
 config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const initApp = initializeApp(JSON.parse(process.env.FIREBASE_CONFIG));
@@ -85,9 +88,9 @@ app.post("/postConfession", (request, response) => {
 
 // static files (build of your frontend)
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+    app.use(express.static(join(__dirname, 'frontend', 'build')));
     app.get('/*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+        res.sendFile(join(__dirname, 'frontend', 'build', 'index.html'));
     })
 }
 
